@@ -1,0 +1,73 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { PlayerStats, UserProfile } from "../backend";
+import { useActor } from "./useActor";
+
+export function useGetMyPlayerStats() {
+  const { actor, isFetching: actorFetching } = useActor();
+
+  const query = useQuery<PlayerStats | null>({
+    queryKey: ["myPlayerStats"],
+    queryFn: async () => {
+      if (!actor) throw new Error("Actor not available");
+      return actor.getMyPlayerStats();
+    },
+    enabled: !!actor && !actorFetching,
+    retry: false,
+  });
+
+  return {
+    ...query,
+    isLoading: actorFetching || query.isLoading,
+    isFetched: !!actor && query.isFetched,
+  };
+}
+
+export function useUpdatePlayerStats() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (stats: PlayerStats) => {
+      if (!actor) throw new Error("Actor not ready");
+      return actor.updatePlayerStats(stats);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["myPlayerStats"] });
+    },
+  });
+}
+
+export function useGetCallerUserProfile() {
+  const { actor, isFetching: actorFetching } = useActor();
+
+  const query = useQuery<UserProfile | null>({
+    queryKey: ["currentUserProfile"],
+    queryFn: async () => {
+      if (!actor) throw new Error("Actor not available");
+      return actor.getCallerUserProfile();
+    },
+    enabled: !!actor && !actorFetching,
+    retry: false,
+  });
+
+  return {
+    ...query,
+    isLoading: actorFetching || query.isLoading,
+    isFetched: !!actor && query.isFetched,
+  };
+}
+
+export function useSaveCallerUserProfile() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (profile: UserProfile) => {
+      if (!actor) throw new Error("Actor not ready");
+      return actor.saveCallerUserProfile(profile);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["currentUserProfile"] });
+    },
+  });
+}

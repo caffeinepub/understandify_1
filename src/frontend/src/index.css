@@ -1,0 +1,416 @@
+@import url("https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radius: 0.25rem;
+
+    /* Battle Zone dark military theme */
+    --background: oklch(0.08 0.02 140);
+    --foreground: oklch(0.92 0.04 140);
+
+    --card: oklch(0.12 0.03 140);
+    --card-foreground: oklch(0.92 0.04 140);
+
+    --popover: oklch(0.12 0.03 140);
+    --popover-foreground: oklch(0.92 0.04 140);
+
+    --primary: oklch(0.72 0.22 45);
+    --primary-foreground: oklch(0.08 0.02 140);
+
+    --secondary: oklch(0.16 0.04 140);
+    --secondary-foreground: oklch(0.8 0.04 140);
+
+    --muted: oklch(0.18 0.03 140);
+    --muted-foreground: oklch(0.55 0.05 140);
+
+    --accent: oklch(0.72 0.22 195);
+    --accent-foreground: oklch(0.08 0.02 140);
+
+    --destructive: oklch(0.6 0.25 25);
+    --destructive-foreground: oklch(0.98 0.01 0);
+
+    --border: oklch(0.22 0.05 140);
+    --input: oklch(0.16 0.04 140);
+    --ring: oklch(0.72 0.22 45);
+
+    --chart-1: oklch(0.72 0.22 45);
+    --chart-2: oklch(0.72 0.22 195);
+    --chart-3: oklch(0.6 0.25 25);
+    --chart-4: oklch(0.75 0.18 85);
+    --chart-5: oklch(0.65 0.2 145);
+
+    --sidebar: oklch(0.1 0.02 140);
+    --sidebar-foreground: oklch(0.92 0.04 140);
+    --sidebar-primary: oklch(0.72 0.22 45);
+    --sidebar-primary-foreground: oklch(0.08 0.02 140);
+    --sidebar-accent: oklch(0.16 0.04 140);
+    --sidebar-accent-foreground: oklch(0.92 0.04 140);
+    --sidebar-border: oklch(0.22 0.05 140);
+    --sidebar-ring: oklch(0.72 0.22 45);
+
+    /* Battle Zone custom tokens */
+    --bz-dark: oklch(0.07 0.02 140);
+    --bz-surface: oklch(0.12 0.03 140);
+    --bz-border: oklch(0.22 0.05 140);
+    --bz-orange: oklch(0.72 0.22 45);
+    --bz-red: oklch(0.6 0.25 25);
+    --bz-cyan: oklch(0.8 0.18 195);
+    --bz-green: oklch(0.65 0.2 145);
+    --bz-muted: oklch(0.55 0.05 140);
+    --bz-yellow: oklch(0.85 0.18 85);
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Rajdhani", sans-serif;
+    background-color: oklch(0.07 0.02 140);
+    min-height: 100vh;
+    overflow: hidden;
+  }
+}
+
+@layer components {
+  .font-tactical {
+    font-family: "Orbitron", monospace;
+  }
+
+  .font-mono-tactical {
+    font-family: "Share Tech Mono", monospace;
+  }
+
+  .bz-card {
+    background: oklch(0.12 0.03 140 / 0.95);
+    backdrop-filter: blur(12px);
+    border: 1px solid oklch(0.22 0.05 140);
+    border-radius: 2px;
+  }
+
+  .bz-card-sm {
+    background: oklch(0.1 0.02 140 / 0.9);
+    border: 1px solid oklch(0.2 0.04 140);
+    border-radius: 2px;
+  }
+
+  .bz-hud-panel {
+    background: oklch(0.08 0.02 140 / 0.85);
+    border: 1px solid oklch(0.25 0.06 140);
+    border-radius: 2px;
+    backdrop-filter: blur(8px);
+  }
+
+  .bz-btn-primary {
+    background: oklch(0.72 0.22 45);
+    color: oklch(0.08 0.02 140);
+    font-family: "Orbitron", monospace;
+    font-weight: 700;
+    font-size: 0.875rem;
+    letter-spacing: 0.15em;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-transform: uppercase;
+    box-shadow: 0 0 15px oklch(0.72 0.22 45 / 0.4);
+  }
+
+  .bz-btn-primary:hover:not(:disabled) {
+    background: oklch(0.78 0.22 45);
+    box-shadow: 0 0 25px oklch(0.72 0.22 45 / 0.7);
+    transform: translateY(-1px);
+  }
+
+  .bz-btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .bz-btn-secondary {
+    background: oklch(0.14 0.03 140);
+    color: oklch(0.7 0.05 140);
+    font-family: "Orbitron", monospace;
+    font-weight: 600;
+    font-size: 0.875rem;
+    letter-spacing: 0.15em;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid oklch(0.25 0.05 140);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-transform: uppercase;
+  }
+
+  .bz-btn-secondary:hover:not(:disabled) {
+    background: oklch(0.18 0.04 140);
+    border-color: oklch(0.35 0.06 140);
+    color: oklch(0.85 0.05 140);
+  }
+
+  .bz-btn-cyan {
+    background: oklch(0.8 0.18 195);
+    color: oklch(0.08 0.02 140);
+    font-family: "Orbitron", monospace;
+    font-weight: 700;
+    font-size: 0.875rem;
+    letter-spacing: 0.15em;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-transform: uppercase;
+    box-shadow: 0 0 15px oklch(0.8 0.18 195 / 0.4);
+  }
+
+  .bz-btn-cyan:hover:not(:disabled) {
+    background: oklch(0.85 0.18 195);
+    box-shadow: 0 0 25px oklch(0.8 0.18 195 / 0.7);
+    transform: translateY(-1px);
+  }
+
+  .bz-input {
+    background: oklch(0.1 0.02 140);
+    border: 1px solid oklch(0.25 0.05 140);
+    border-radius: 2px;
+    color: oklch(0.9 0.04 140);
+    font-family: "Share Tech Mono", monospace;
+    font-size: 1rem;
+    padding: 0.625rem 0.875rem;
+    outline: none;
+    transition: border-color 0.15s ease;
+    letter-spacing: 0.05em;
+  }
+
+  .bz-input:focus {
+    border-color: oklch(0.72 0.22 45);
+    box-shadow: 0 0 8px oklch(0.72 0.22 45 / 0.3);
+  }
+
+  .bz-input::placeholder {
+    color: oklch(0.4 0.04 140);
+  }
+}
+
+@layer utilities {
+  .text-bz-orange {
+    color: oklch(0.72 0.22 45);
+  }
+  .text-bz-red {
+    color: oklch(0.6 0.25 25);
+  }
+  .text-bz-cyan {
+    color: oklch(0.8 0.18 195);
+  }
+  .text-bz-green {
+    color: oklch(0.65 0.2 145);
+  }
+  .text-bz-muted {
+    color: oklch(0.55 0.05 140);
+  }
+  .text-bz-yellow {
+    color: oklch(0.85 0.18 85);
+  }
+
+  .bg-bz-dark {
+    background-color: oklch(0.07 0.02 140);
+  }
+  .bg-bz-surface {
+    background-color: oklch(0.12 0.03 140);
+  }
+
+  .border-bz-border {
+    border-color: oklch(0.22 0.05 140);
+  }
+  .border-bz-orange {
+    border-color: oklch(0.72 0.22 45);
+  }
+  .border-bz-red {
+    border-color: oklch(0.6 0.25 25);
+  }
+  .border-bz-cyan {
+    border-color: oklch(0.8 0.18 195);
+  }
+
+  .glow-orange {
+    box-shadow: 0 0 15px oklch(0.72 0.22 45 / 0.5), 0 0 30px
+      oklch(0.72 0.22 45 / 0.25);
+  }
+  .glow-red {
+    box-shadow: 0 0 15px oklch(0.6 0.25 25 / 0.5), 0 0 30px
+      oklch(0.6 0.25 25 / 0.25);
+  }
+  .glow-cyan {
+    box-shadow: 0 0 15px oklch(0.8 0.18 195 / 0.5), 0 0 30px
+      oklch(0.8 0.18 195 / 0.25);
+  }
+
+  .text-glow-orange {
+    text-shadow: 0 0 10px oklch(0.72 0.22 45 / 0.8), 0 0 20px
+      oklch(0.72 0.22 45 / 0.4);
+  }
+  .text-glow-red {
+    text-shadow: 0 0 10px oklch(0.6 0.25 25 / 0.8), 0 0 20px
+      oklch(0.6 0.25 25 / 0.4);
+  }
+  .text-glow-cyan {
+    text-shadow: 0 0 10px oklch(0.8 0.18 195 / 0.8), 0 0 20px
+      oklch(0.8 0.18 195 / 0.4);
+  }
+
+  .tactical-border {
+    border: 1px solid oklch(0.3 0.06 140);
+    border-top: 2px solid oklch(0.72 0.22 45);
+  }
+
+  .scanlines {
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.05) 2px,
+      rgba(0, 0, 0, 0.05) 4px
+    );
+  }
+}
+
+/* Battle Zone animations */
+@keyframes bz-pulse-orange {
+  0%,
+  100% {
+    box-shadow: 0 0 10px oklch(0.72 0.22 45 / 0.4);
+  }
+  50% {
+    box-shadow: 0 0 25px oklch(0.72 0.22 45 / 0.8), 0 0 50px
+      oklch(0.72 0.22 45 / 0.3);
+  }
+}
+
+@keyframes bz-pulse-red {
+  0%,
+  100% {
+    box-shadow: 0 0 10px oklch(0.6 0.25 25 / 0.4);
+  }
+  50% {
+    box-shadow: 0 0 25px oklch(0.6 0.25 25 / 0.8), 0 0 50px
+      oklch(0.6 0.25 25 / 0.3);
+  }
+}
+
+@keyframes bz-flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 1;
+  }
+  93% {
+    opacity: 0.8;
+  }
+  94% {
+    opacity: 1;
+  }
+  96% {
+    opacity: 0.9;
+  }
+  97% {
+    opacity: 1;
+  }
+}
+
+@keyframes bz-slide-in {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes bz-zoom-in {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-bz-pulse-orange {
+  animation: bz-pulse-orange 2s ease-in-out infinite;
+}
+.animate-bz-pulse-red {
+  animation: bz-pulse-red 1s ease-in-out infinite;
+}
+.animate-bz-flicker {
+  animation: bz-flicker 4s linear infinite;
+}
+.animate-bz-slide-in {
+  animation: bz-slide-in 0.4s ease-out forwards;
+}
+.animate-bz-zoom-in {
+  animation: bz-zoom-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Accordion animations (required by shadcn) */
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+.animate-accordion-down {
+  animation: accordion-down 0.2s ease-out;
+}
+.animate-accordion-up {
+  animation: accordion-up 0.2s ease-out;
+}
+
+/* News ticker scroll animation */
+@keyframes ticker-scroll {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+.animate-ticker {
+  animation: ticker-scroll 40s linear infinite;
+}
+
+/* Image generation pulse */
+@keyframes gen-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.animate-gen-pulse {
+  animation: gen-pulse 1.5s ease-in-out infinite;
+}
