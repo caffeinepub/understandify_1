@@ -1,7 +1,8 @@
 import type React from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import AppHeader from "./components/AppHeader";
 import ChildMode from "./components/ChildMode";
+import LoginScreen from "./components/LoginScreen";
 import ParentMode from "./components/ParentMode";
 import PinEntryModal from "./components/PinEntryModal";
 import SpaceBackground from "./components/SpaceBackground";
@@ -12,10 +13,11 @@ import {
 } from "./hooks/useQueries";
 
 type AppMode = "child" | "parent";
+type AppStage = "splash" | "login" | "app";
 type ModalReason = "switch-to-parent" | "exit-attempt" | null;
 
 const App: React.FC = () => {
-  const [showSplash, setShowSplash] = useState(true);
+  const [stage, setStage] = useState<AppStage>("splash");
   const [mode, setMode] = useState<AppMode>("child");
   const [showPinModal, setShowPinModal] = useState(false);
   const [modalReason, setModalReason] = useState<ModalReason>(null);
@@ -24,9 +26,25 @@ const App: React.FC = () => {
   const { data: isPinSet } = useIsParentPinSet();
   const authenticate = useAuthenticateParentMode();
 
-  // Show PIN modal on first load if no PIN is set (prompt parent to set one)
-  // We don't auto-show setup — parent can do it from settings
+  // Called when splash finishes → go to login
+  const handleSplashDismiss = () => {
+    setStage("login");
+  };
 
+  // Child clicks "I'm a Child" → go straight into app as child
+  const handleChildLogin = () => {
+    setMode("child");
+    setStage("app");
+  };
+
+  // Parent clicks "I'm a Parent" → show PIN modal; on success → app as parent
+  const handleParentLogin = () => {
+    setPinError(null);
+    setModalReason("switch-to-parent");
+    setShowPinModal(true);
+  };
+
+  // In-app: child mode header "Parent" button
   const handleParentButtonClick = () => {
     setPinError(null);
     setModalReason("switch-to-parent");
@@ -47,6 +65,8 @@ const App: React.FC = () => {
       if (pin === "1234") {
         if (modalReason === "switch-to-parent") {
           setMode("parent");
+          // If we're on the login screen, also advance to app stage
+          if (stage === "login") setStage("app");
         }
         setShowPinModal(false);
         setModalReason(null);
@@ -61,12 +81,13 @@ const App: React.FC = () => {
       if (isValid) {
         if (modalReason === "switch-to-parent") {
           setMode("parent");
+          // If we're on the login screen, also advance to app stage
+          if (stage === "login") setStage("app");
         }
         // For exit-attempt: if PIN is correct, allow exit
         if (modalReason === "exit-attempt") {
           setShowPinModal(false);
           setModalReason(null);
-          // Allow the page to unload
           window.removeEventListener("beforeunload", () => {});
           window.close();
           return;
@@ -82,9 +103,8 @@ const App: React.FC = () => {
   };
 
   const handlePinCancel = () => {
-    // Only allow cancel if it's not an exit attempt (exit attempt should stay locked)
+    // Only allow cancel if it's not an exit attempt
     if (modalReason === "exit-attempt") {
-      // Stay in child mode, don't close
       setShowPinModal(false);
       setModalReason(null);
       return;
@@ -115,10 +135,18 @@ const App: React.FC = () => {
       <SpaceBackground />
 
       {/* Splash screen */}
-      {showSplash && <SplashScreen onDismiss={() => setShowSplash(false)} />}
+      {stage === "splash" && <SplashScreen onDismiss={handleSplashDismiss} />}
+
+      {/* Login screen */}
+      {stage === "login" && (
+        <LoginScreen
+          onChildLogin={handleChildLogin}
+          onParentLogin={handleParentLogin}
+        />
+      )}
 
       {/* Main app */}
-      {!showSplash && (
+      {stage === "app" && (
         <div className="relative z-10 flex flex-col min-h-screen">
           <AppHeader
             mode={mode}
@@ -166,7 +194,7 @@ const App: React.FC = () => {
         </div>
       )}
 
-      {/* PIN Entry Modal */}
+      {/* PIN Entry Modal — available on login and app stages */}
       {showPinModal && (
         <PinEntryModal
           title={getModalTitle()}
