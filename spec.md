@@ -1,26 +1,25 @@
 # Understandify
 
 ## Current State
-The app starts with a SplashScreen (animated logo) and then goes straight into ChildMode. There is no login/welcome screen. Parent access is gated behind a PIN modal triggered from within the app header.
+The app is a child-safe learning platform. For math questions, it shows a step-by-step method (MathMethodDisplay component) and then automatically reveals the final answer with confetti after all steps animate in.
 
 ## Requested Changes (Diff)
 
 ### Add
-- A LoginScreen component that appears immediately after the SplashScreen dismisses (before ChildMode or ParentMode is shown).
-- The LoginScreen lets the user choose: "I'm a Child" or "I'm a Parent".
-  - "I'm a Child" goes directly into ChildMode.
-  - "I'm a Parent" opens the PIN entry modal (same flow as the existing parent mode switch).
-- The login screen should be visually themed (space/stars) and show the Understandify logo and name prominently.
-- After successful login (child or parent), store the chosen mode in state and show the appropriate mode.
+- After all method steps are shown, display an answer input box where the child types their answer.
+- A "Check My Answer" submit button below the input.
+- If the child's answer is correct: show a celebratory success message with confetti (same as before).
+- If the child's answer is wrong (first attempt): give an encouraging hint and let them try again.
+- If the child's answer is wrong a second time: show the correct answer with a kind explanation.
 
 ### Modify
-- App.tsx: Add a new app stage "login" between splash and main. After splash dismisses, show LoginScreen instead of going directly to the main app. Once user picks a role (child or parent with correct PIN), proceed to the main app with the chosen mode.
-- The existing "Parent" button in the header (child mode) and the three-dots "Exit Parent Mode" remain functional as before.
+- MathMethodDisplay: Remove the automatic final answer reveal. Replace it with the interactive answer input flow described above.
 
 ### Remove
-- Nothing removed, only the initial flow is extended.
+- The automatic `setShowFinal` timer that reveals the answer without child input.
 
 ## Implementation Plan
-1. Create `src/frontend/src/components/LoginScreen.tsx` — a full-screen welcome/login page with two big buttons: "I'm a Child 🚀" and "I'm a Parent 🔐". Show the logo (half-body: `/assets/generated/understandify-logo-half.dim_512x512.png`) and the app name. Space themed background.
-2. Modify `App.tsx` to add a `stage` state with values `"splash" | "login" | "app"`. After splash, show LoginScreen. From LoginScreen, child click → stage="app" mode="child". Parent click → open PIN modal; on success → stage="app" mode="parent".
-3. Add `data-ocid` markers on the two login buttons: `login.child_button` and `login.parent_button`.
+1. In `MathMethodDisplay.tsx`, replace the `showFinal` auto-reveal with an `answerPhase` state: `idle` | `awaiting` | `correct` | `hint` | `revealed`.
+2. Once all steps have animated in, transition to `awaiting` — show an input field with a "Check My Answer" button.
+3. On submit: compare child's input (trimmed) to `mathData.answer`. If correct → `correct` + confetti. If wrong first time → `hint`. If wrong second time → `revealed` (show the actual answer kindly).
+4. Keep all existing visual style, confetti, encouragement text, and data-ocid markers.

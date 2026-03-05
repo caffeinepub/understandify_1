@@ -1,9 +1,11 @@
+import { AnimatePresence } from "motion/react";
 import type React from "react";
 import { useCallback, useEffect, useState } from "react";
 import { useRecordQuestion } from "../hooks/useQueries";
 import { type AnswerResult, processQuestion } from "../lib/answerEngine";
 import AnswerDisplay from "./AnswerDisplay";
 import ImageGeneratorPanel from "./ImageGeneratorPanel";
+import ParentNoticePanel from "./ParentNoticePanel";
 import QuestionInput from "./QuestionInput";
 
 interface QAEntry {
@@ -22,6 +24,7 @@ const ChildMode: React.FC<ChildModeProps> = ({ onExitAttempt }) => {
   const [qaHistory, setQaHistory] = useState<QAEntry[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [activeTab, setActiveTab] = useState<ActiveTab>("learn");
+  const [showParentPanel, setShowParentPanel] = useState(false);
   const recordQuestion = useRecordQuestion();
 
   // Intercept browser back/exit
@@ -194,6 +197,30 @@ const ChildMode: React.FC<ChildModeProps> = ({ onExitAttempt }) => {
           )}
         </>
       )}
+
+      {/* Floating Parent Notice button — bottom-right corner */}
+      <button
+        type="button"
+        data-ocid="child.parent_notice.button"
+        onClick={() => setShowParentPanel(true)}
+        className="fixed bottom-6 right-4 z-40 flex items-center gap-2 px-4 py-2.5 rounded-full font-nunito font-bold text-sm transition-all hover:scale-105 active:scale-95"
+        style={{
+          background: "oklch(0.82 0.18 85)",
+          color: "oklch(0.10 0.03 265)",
+          boxShadow:
+            "0 4px 16px oklch(0.82 0.18 85 / 0.45), 0 2px 8px oklch(0.05 0.02 265 / 0.5)",
+        }}
+        aria-label="Open parent controls"
+      >
+        🔐 Parent Notice
+      </button>
+
+      {/* Parent Notice Panel (bottom sheet) */}
+      <AnimatePresence>
+        {showParentPanel && (
+          <ParentNoticePanel onClose={() => setShowParentPanel(false)} />
+        )}
+      </AnimatePresence>
     </div>
   );
 };
